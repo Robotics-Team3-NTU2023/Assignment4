@@ -78,14 +78,7 @@ class ImageSub(Node):
         # TODO (write your code here)
         br = CvBridge()
         img = br.imgmsg_to_cv2(data)
-        cv2.imwrite(f"/home/robot/workspace2/team3_ws/try/test.png", img)
-        center = find_center(img)
-        print(center)
-        f = open("./center.txt", "w")
-        for c in center:
-            f.write(f"{str(c)}\n")
-        f.close()
-        # cv2.waitKey(1)
+        cv2.imwrite(f"/home/robot/workspace2/team3_ws/test.png", img)
 
 def send_script(script):
     arm_node = rclpy.create_node('arm')

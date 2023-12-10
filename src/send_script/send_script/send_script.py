@@ -26,8 +26,6 @@ def find_center(image):
     '''
     gray=cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
     ret,thresh=cv2.threshold(gray,125,255,cv2.THRESH_BINARY)
-    # plt.imshow(thresh)
-    # plt.show()
     contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)  
 
     block=[]
@@ -39,11 +37,7 @@ def find_center(image):
     # print(block)
 
 
-    img_draw=cv2.drawContours(image,block,-1,(0,255,0),5)
-    # plt.imshow(img_draw)
-    # plt.show()
-    # Determine center of gravity and orientation using Moments
-    
+    img_draw=cv2.drawContours(image,block,-1,(0,255,0),5) 
     output=[]
     
 
@@ -88,11 +82,8 @@ def set_io(state):
     gripper_node.destroy_node()
 
 def move_to(targetP1):
-    # targetP2 = "350.00, 350, 690, -180.00, 0.0, 135.00"
     script1 = "PTP(\"CPP\","+targetP1+",100,200,0,false)"
-    # script2 = "PTP(\"CPP\","+targetP2+",100,200,0,false)"
     send_script(script1)
-    # send_script(script2)
 
 def ImagetoRobot(x,y):
     img_y_max=1280
@@ -108,80 +99,14 @@ def ImagetoRobot(x,y):
     return (x2,y2)
 
 def main(args=None):
-
     rclpy.init(args=args)
-
-    
-    
-
-
-    #--- move command by joint angle ---#
-    # script = 'PTP(\"JPP\",45,0,90,0,90,0,35,200,0,false)'
-
-    #--- move command by end effector's pose (x,y,z,a,b,c) ---#
-    # targetP1 = "398.97, -122.27, 748.26, -179.62, 0.25, 90.12"s
-
-    # Initial camera position for taking image (Please do not change the values)
-    # For right arm: targetP1 = "230.00, 230, 730, -180.00, 0.0, 135.00"
-    # For left  arm: targetP1 = "350.00, 350, 730, -180.s00, 0.0, 135.00"
-    # set_io(0.0)
-    # move_to("230.00, 230, 110, -180.00, 0.0, 135.00")
-    # set_io(0.0)
-    # reset
-    # move_to("230.00, 230, 730, -180.00, 0.0, 135.00")
-    
-    # move_to("250, 250, 500, -180.00, 0.0, 180.00") # position take photo
     move_to("250, 250, 500, -180.00, 0.0, 180.00")
-    # move_to("458, 160, 120, -180.00, 0.0, 180.00") # leftest position
-    # move_to("24, 509, 120, -180.00, 0.0, 180.00") # rightest position
     send_script("Vision_DoJob(job1)")
     cv2.waitKey(1)
-
-
     time.sleep(10)
 
-    # for i in range(130, 331, 10):
-    #     move_to(f"{i}, 130, 500, -180.00, 0.0, 180.00")
+    img=cv2.imread('/home/robot/workspace2/team3_ws/test.png')
 
-    
-    def image_to_cartiesian(img):
-        height,width,_ = img.shape
-        cart = img.copy
-        for j in range(0,height):
-            for k in range(0,width):
-                cart[k][height-j-1]=img[j][k]
-        return cart
-
-    
-    
-    img=cv2.imread('/home/robot/workspace2/team3_ws/try/test.png')
-
-    
-    # img=cv2.transpose(img)
-    # img = cv2.flip(img,1)
-
-    
-    # print(img.shape)
-    # img = cv2.flip(img,0)
-    # img = cv2.flip(img,1)
-    # plt.imshow(img)
-    # plt.show()
-
-    # move_to("200, 180, 200, -180.00, 0.0, 180.00")
-
-
-
-    # f = open("./center.txt", "r")
-    # for line in f:
-    #     print(line)
-    #     print("hi")
-    #     if 'str' in line:
-    #         break
-    # f.close()
-    # send_script("Vision_DoJob(job1)")
-    # cv2.waitKey(1)
-
-    # image = cv2.imread('/home/robot/workspace2/team3_ws/try/test.png')
     output=find_center(img)
 
 
@@ -211,12 +136,6 @@ def main(args=None):
         if deg < -270:
             deg += 180
         
-        # cdeg = deg+90 if deg > -180 else deg-90
-        # cax = math.cos(cdeg)*10
-        # cay = math.sin(cdeg)*10
-        # x_new += cax
-        # y_new += cay
-        # print(x_new,y_new, deg, cdeg, cax, cay)
         set_io(0.0)
         move_to(f"{(int)(x_new)}, {(int)(y_new)}, 300, -180.00, 0.0, {deg}")
         for i in range(160, 109, -10):
@@ -232,20 +151,6 @@ def main(args=None):
         move_to("571, 180, 300, -180.00, 0.0, 180.00")
         height += 25
 
-
-    
-
-
-
-
-
-    # set_io(1.0) # 1.0: close gripper, 0.0: open gripper
-    # # set_io(0.0)
-
-    # move_to("230.00, 230, 300, -180.00, 0.0, 135.00")
-    # move_to("300.00, 300, 110, -180.00, 0.0, 135.00")
-    # set_io(0.0)
-    # move_to("300.00, 300, 300, -180.00, 0.0, 135.00")
     rclpy.shutdown()
 
 if __name__ == '__main__':
