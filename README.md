@@ -23,4 +23,4 @@ source install/setup.bash
 ros2 run send_script send_script
 ```
 # Demo video
-[<img src="https://i.ytimg.com/vi/Hc79sDi3f0U/maxresdefault.jpg" width="50%">](https://youtu.be/GaMTFDqGVAY "Demo video")
+[<img src="./image/cover.png" width="50%">](https://youtu.be/GaMTFDqGVAY "Demo video")
